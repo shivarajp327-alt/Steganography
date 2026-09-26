@@ -88,33 +88,55 @@ Status encode_size_to_lsb(char data, char *image_buffer);
 
 /* Copy remaining image bytes from src to stego image after encoding */
 Status copy_remaining_img_data(FILE *fptr_src, FILE *fptr_dest);
+#endif
+
 
 //-------------------------------------//
+// DECODING PROCESS 
 
-/* Read and validate Encode args from argv */
-Status read_and_validate_decode_args(char *argv[], EncodeInfo *encInfo);
+#ifndef DECODE_H
+#define DECODE_H
 
-/* Perform the encoding */
-Status do_decoding(EncodeInfo *encInfo);
+typedef struct 
+{
+    char *stego_image_fname;
+    FILE *fptr_stego_image;
+    /* data */
+    char *output_fname;
+    FILE *fptr_output;
+
+    uint extn_size;
+    char extn[20];
+
+    uint secret_file_size;
+} DecodeInfo;
+
+
+
+/* Read and validate decode args from argv */
+Status read_and_validate_decode_args(char *argv[], DecodeInfo *decInfo);
+
+/* Perform the decoding */
+Status do_decoding(DecodeInfo *decInfo);
 
 /* Get File pointers for i/p and o/p files */
-Status open_files_decode(EncodeInfo *encInfo);
+Status open_files_decode(DecodeInfo *decInfo);
 
 /* Store Magic String */
-Status decode_magic_string(const char *magic_string, EncodeInfo *encInfo);
+Status decode_magic_string( DecodeInfo *decInfo);
 
-Status decode_secret_file_extn_size( EncodeInfo *encInfo);
+Status decode_secret_file_extn_size( DecodeInfo *decInfo);
 
-/* Encode secret file extenstion */
-Status decode_secret_file_extn(EncodeInfo *encInfo);
+/* Decode secret file extenstion */
+Status decode_secret_file_extn(DecodeInfo *decInfo);
 
-/* Encode secret file size */
-Status decode_secret_file_size(EncodeInfo *encInfo);
+/* Decode secret file size */
+Status decode_secret_file_size(DecodeInfo *decInfo);
 
-/* Encode secret file data*/
-Status decode_secret_file_data(EncodeInfo *encInfo);
+/* decode secret file data*/
+Status decode_secret_file_data(DecodeInfo *decInfo);
 
-/* Encode a byte into LSB of image data array */
+/* decode a byte into LSB of image data array */
 Status decode_byte_to_lsb(char data, char *image_buffer);
 
 Status decode_size_to_lsb(char data, char *image_buffer);
