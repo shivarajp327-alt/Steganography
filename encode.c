@@ -328,6 +328,7 @@ Status read_and_validate_decode_args(char *argv[], DecodeInfo *decInfo)
 /* Perform the decoding */
 Status do_decoding(DecodeInfo *decInfo)
 {
+    fseek(decInfo->fptr_stego_image,54,SEEK_SET);
     if(decode_magic_string(decInfo) == e_failure)
     {
         printf("Magic string decoding failed\n");
@@ -377,6 +378,12 @@ Status decode_magic_string(DecodeInfo *decInfo)
         magic_string[i] = data;
     }
     magic_string[2] = '\0';
+    printf("Decoded magic string = [%s]\n",
+           magic_string);
+
+    printf("Expected magic string = [%s]\n",
+           MAGIC_STRING);
+           
     if(strcmp(magic_string,MAGIC_STRING) != 0)
     {
         printf("Invalid magic string\n");
