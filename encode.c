@@ -376,7 +376,7 @@ Status decode_magic_string(DecodeInfo *decInfo)
         decode_byte_to_lsb(buffer,&data);
         magic_string[i] = data;
     }
-    magic_string[2] = NULL;
+    magic_string[2] = '\0';
     if(strcmp(magic_string,MAGIC_STRING) != 0)
     {
         printf("Invalid magic string\n");
@@ -391,7 +391,7 @@ Status decode_secret_file_extn_size( DecodeInfo *decInfo)
 {
     char buffer[32];
     fread(buffer ,1,32,decInfo->fptr_stego_image);
-    decode_size_to_lsb(buffer,decInfo->extn_size);
+    decode_size_to_lsb(buffer,&decInfo->extn_size);
     printf("Decode_secret_file_extn_size success\n");
     return e_success;
 }
@@ -408,7 +408,7 @@ Status decode_secret_file_extn(DecodeInfo *decInfo)
         decode_byte_to_lsb(buffer,&data);
         decInfo->extn[i] = data;
     }
-    decInfo->extn[decInfo->extn_size] = NULL;
+    decInfo->extn[decInfo->extn_size] = '\0';
     printf("Secret file extension decoded successfully\n");
     return e_success;
 }
@@ -419,7 +419,7 @@ Status decode_secret_file_size(DecodeInfo *decInfo)
 {
     char buffer[32];
     fread(buffer,1,32,decInfo->fptr_stego_image);
-    decode_size_to_lsb(buffer,decInfo->secret_file_size);
+    decode_size_to_lsb(buffer,&decInfo->secret_file_size);
     printf("decode_secret_file_size success\n");
     return e_success;
 }
@@ -429,7 +429,7 @@ Status decode_secret_file_data(DecodeInfo *decInfo)
 {
     char buffer[8];
     char data;
-    for(int i=0;i<decInfo->secret_file_size;i++)
+    for(uint i=0;i<decInfo->secret_file_size;i++)
     {
         fread(buffer,1,8,decInfo->fptr_stego_image);
         decode_byte_to_lsb(buffer,&data);
@@ -440,23 +440,23 @@ Status decode_secret_file_data(DecodeInfo *decInfo)
 }
 
 /* decode a byte into LSB of image data array */
-Status decode_byte_to_lsb(char data, char *image_buffer)
+Status decode_byte_to_lsb(char *image_buffer,char *data)
 {
-    data=0;
+    *data=0;
     for(int i=0;i<8;i++)
     {
-        data = (data << 1) | (image_buffer[i] & 1);
+        *data = (*data << 1) | (image_buffer[i] & 1);
     }
     printf("Decode_byte_to_lsb is successfull\n");
     return e_success;
 }
 
-Status decode_size_to_lsb(char data, char *image_buffer)
+Status decode_size_to_lsb(char *image_buffer,uint *data)
 {
-    data = 0;
+    *data = 0;
     for(int i=0;i<32;i++)
     {
-        data = (data << 1) | (image_buffer[i] & 1);
+        *data = (*data << 1) | (image_buffer[i] & 1);
     }
     printf("Decode_size_to_lsb is successfull\n");
     return e_success;

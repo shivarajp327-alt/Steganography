@@ -137,9 +137,9 @@ Status decode_secret_file_size(DecodeInfo *decInfo);
 Status decode_secret_file_data(DecodeInfo *decInfo);
 
 /* decode a byte into LSB of image data array */
-Status decode_byte_to_lsb(char data, char *image_buffer);
+Status decode_byte_to_lsb(char *image_buffer,char *data);
 
-Status decode_size_to_lsb(char data, char *image_buffer);
+Status decode_size_to_lsb(char *image_buffer,uint *data);
 
 
 
